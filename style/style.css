@@ -1,0 +1,19 @@
+*{
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+.custom-border{
+    border-width: 5px;
+    /* border-color: #e1e1e1; */
+    border-color:pink
+}
+#company{
+    width: 45%;
+}
+.select-company{
+    float: right;
+}
+.search-com{
+    float: right;
+}
