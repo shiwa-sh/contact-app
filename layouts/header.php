@@ -20,7 +20,9 @@
             <ul class="navbar-nav p-2">
                 <div>
                     <button class="btn btn-outline-secondary p-2">Login</button>
-                    <button class="btn btn-outline-primary p-2">Register</button> 
+                    <!-- <button class="btn btn-outline-primary p-2">Register</button> -->
+                    <a class="btn btn-outline-primary p-2" href="signup.php">Sign up <i class="fa fa-sign-in-alt ml-3"></i></a>
+ 
                 </div>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

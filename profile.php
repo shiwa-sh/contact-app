@@ -1,3 +1,32 @@
+<?php
+require_once 'database/conect.php';
+if(isset($_GET['user_id'])){
+    $user_id = $_GET['user_id'];
+    $sql = "SELECT * FROM contacts WHERE user_id=$user_id;";
+    $query = $con->prepare($sql);
+    $query->execute();
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  print_r($res[0]['address']);
+}
+if(isset($_POST['edit'])){
+
+
+  $data = [
+    ($_POST['first_name'])?$_POST['first_name']:$res[0]['name'],
+    ($_POST['last_name'])?$_POST['last_name']:$res[0]['lname'],
+     ($_POST['email'])?$_POST['email']:$res[0]['email'],
+    ($_POST['phone'])?$_POST['phone']:$res[0]['phone'],
+    ($_POST['address'])?$_POST['address']:$res[0]['address'],
+    ($_POST['company'])?$_POST['company']:$res[0]['company'],
+    $res[0]['user_id'],
+];
+ // print_r($data);
+  //$edit_sql = "UPDATE contacts SET name=:name ,lname=:lname, email=:email, phone:=phone ,address=:address, company=:company WHERE user_id=:user_id";
+  $edit_sql = "UPDATE contacts SET name=? ,lname=?, email=?, phone=? ,address=?, company=? WHERE user_id=?";
+  $stmt = $con->prepare($edit_sql)->execute($data);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +78,7 @@
     </nav>
     <!-- end of header -->
     <!-- main form -->
-    <div class="container mt-5">
+    <div class="container mt-5 ">
         <div class="row">
             <div class="col-md-auto">
                 <div class="card" style="width: 18rem;">
@@ -63,33 +92,47 @@
                     </ul>
                   </div>
             </div>
-            <div class="col">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header bg-primary text-white"><h4>Edit Profile</h4></div>
                     <div class="card-body row">
-                        <form class="col-8">
+                        <form class="col-8" method="POST">
+                            <?php
+                            if($res){
+                            ?>
                             <div class="mb-3">
                               <label for="exampleInputEmail1" class="form-label">First Name</label>
-                              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                              <input type="text" class="form-control" aria-describedby="emailHelp" name="first_name" placeholder="<?php echo $res[0]['name'];?>">
                               
                             </div>
                             <div class="mb-3">
                               <label for="exampleInputPassword1" class="form-label">Last Name</label>
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" name="last_name" placeholder="<?php echo $res[0]['lname'];?>">
                             </div>
 
                             <div class="mb-3">
                                 <label for="exampleInputCompany1" class="form-label">Company</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="company" placeholder="<?php echo $res[0]['company'];?>">
                               </div>
 
                               <div class="mb-3">
-                                <label for="bioInput" class="form-label">Bio</label>
-                                <textarea name="bio" id="bioInput" cols="15" rows="5" class="form-control"></textarea>
+                                <label for="exampleInputCompany1" class="form-label">Email</label>
+                                <input type="text" class="form-control" name="email" placeholder="<?php echo $res[0]['email'];?>">
                               </div>
-                            <button type="submit" class="btn btn-success">Update Profile</button>
+
+                              <div class="mb-3">
+                                <label for="exampleInputCompany1" class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="phone" placeholder="<?php echo $res[0]['phone'];?>">
+                              </div>
+
+                              <div class="mb-3">
+                                <label for="bioInput" class="form-label">Address</label>
+                                <textarea id="bioInput" cols="15"  name="address" rows="5" class="form-control" placeholder="<?php echo $res[0]['address'];?>"></textarea>
+                              </div>
+                            <button type="submit" name="edit" class="btn btn-success">Update Profile</button>
                           </form>
                           <!-- profile picture -->
+                          <form action="upload.php" method="post" enctype="multipart/form-data">
                           <div class="col">
                             <h6 class="text-center">Profile picture</h6>
                             <div class="d-flex justify-content-center mb-4">
@@ -99,11 +142,15 @@
                             <div class="d-flex justify-content-center">
                                 <div class="btn btn-primary btn-rounded">
                                     <label class="form-label text-white m-1" for="customFile2">Select image</label>
-                                    <input type="file" class="form-control d-none" id="customFile2" />
+                                    <input type="file" class="form-control d-none" name="imgfile" />
                                 </div>
                             </div>
                         </div>
+                          </form>
                         <!-- end of profile pic -->
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>

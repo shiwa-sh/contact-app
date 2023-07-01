@@ -1,3 +1,14 @@
+<?php
+require_once 'database/conect.php';
+if(isset($_GET['user_id'])){
+    $user_id = $_GET['user_id'];
+    $sql = "SELECT * FROM contacts WHERE user_id=$user_id;";
+    $query = $con->prepare($sql);
+    $query->execute();
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,45 +30,51 @@
                 <div class="col-md-7">
                     <div class="form-header text-white p-4" style="background-color: #435d7d;"><strong>Contact Details</strong></div>
                     <div class="container bg-white">
+                    <?php
+                    if($res){
+                        
+                    ?>
                     <!-- name -->
                 <div class="row p-3">
                     <div class="col-4">First Name</div>
-                    <div class="col-8 text-secondary"> Alfred</div>
+                    <div class="col-8 text-secondary"><?php echo $res[0]['name'];?></div>
                 </div>
                 <!-- last name -->
                 <div class="row p-3">
                     <div class="col-4">Last Name</div>
-                    <div class="col-8 text-secondary">Kuhlman</div>
+                    <div class="col-8 text-secondary"><?php echo $res[0]['lname'];?></div>
                 </div>
                 <!-- email -->
                 <div class="row p-3">
                     <div class="col-4">Email</div>
-                    <div class="col-8 text-secondary">alfred@test.com</div>
+                    <div class="col-8 text-secondary"><?php echo $res[0]['email'];?></div>
                 </div>
                 <!-- phone -->
                 <div class="row p-3">
                     <div class="col">Phone</div>
-                    <div class="col-8 text-secondary">+6286767565656</div>
+                    <div class="col-8 text-secondary">+<?php echo $res[0]['phone'];?></div>
                 </div>
                 <!-- addresss -->
                 <div class="row p-3">
                     <div class="col">Address</div>
-                    <div class="col-8 text-secondary">Lorem ipsum dolor</div>
+                    <div class="col-8 text-secondary"><?php echo $res[0]['address'];?></div>
                 </div>
                 <!-- company -->
                 <div class="row p-3">
                     <div class="col">Company</div>
-                    <div class="col-8 text-secondary">Company One</div>
+                    <div class="col-8 text-secondary"><?php echo $res[0]['company'];?></div>
                 </div>
                 <hr>
                 <div class="btn-container d-flex justify-content-center">
                     <form action="">
-                        <a href="#" class="btn btn-primary">Edit</a>
-                        <a href="#" class="btn btn-outline-danger">Delete</a>
+                        <button name="edit" class="btn btn-primary">Edit</button>
+                        <!-- <a href="#" class="btn btn-outline-danger">Delete</a> -->
                         <a href="#" class="btn btn-outline-secondary">Cancle</a>
                     </form>
                 </div>
-            
+            <?php
+                    }
+            ?>
             </div>
             </div>
         </div>
